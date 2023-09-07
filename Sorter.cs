@@ -14,9 +14,9 @@ namespace Stream.Profiling
             public required Line Line { get; set; }
         }
 
-        public void Sort(string fileName)
+        public void Sort(string fileName, int singleFileLinesCount)
         {
-            var files = SplitFile(fileName, 10000);
+            var files = SplitFile(fileName, singleFileLinesCount);
             SortLines(files);
             SortFiles(files);
         }

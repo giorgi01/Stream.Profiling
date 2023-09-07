@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 
 namespace Stream.Profiling
 {
@@ -7,11 +8,16 @@ namespace Stream.Profiling
     {
         static void Main(string[] args)
         {
+            var sw = Stopwatch.StartNew();
+
             var gen = new Generator();
-            gen.Generate(1000000);
+            var fileName = gen.Generate(1_000_000);
 
             var sorter = new Sorter();
-            sorter.Sort("L1000000.txt");
+            sorter.Sort(fileName, 100_000);
+
+            sw.Stop();
+            Console.WriteLine($"Execution time: {sw.Elapsed}");
         }
     }
 }

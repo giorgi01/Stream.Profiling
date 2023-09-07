@@ -1,28 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Stream.Profiling
+﻿namespace Stream.Profiling
 {
-    internal class Line : IComparable<Line>
+    internal struct Line : IComparable<Line>
     {
+        private readonly int _pos;
+        private readonly string _line;
+
         public int Number { get; set; }
-        public string Word { get; set; }
+        public ReadOnlySpan<char> Word => _line.AsSpan(_pos + 2);
 
         public Line(string line)
         {
-            var pos = line.IndexOf('.');
-            Number = int.Parse(line[..pos]);
-            Word = line[(pos + 2)..];
+            _pos = line.IndexOf('.');
+            _line = line;
+            Number = int.Parse(line.AsSpan(0, _pos));
         }
 
-        public string Build() => $"{Number}. {Word}";
+        public string Build() => _line;
 
         public int CompareTo(Line other)
         {
-            var result = Word.CompareTo(other.Word);
+            var result = Word.CompareTo(other.Word, StringComparison.Ordinal);
             return result != 0 ? result : Number.CompareTo(other.Number);
         }
     }
